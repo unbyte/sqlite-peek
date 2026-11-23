@@ -10,9 +10,12 @@ type Table = { root: number; sql: string; layout?: TableLayout }
 
 function jsonRow(row: SQLiteRow): JSONRow {
   const result: JSONRow = Object.create(null)
-  for (const [name, value] of Object.entries(row)) {
+  for (const name of Object.keys(row)) {
+    const value = row[name]
     if (value instanceof Uint8Array) {
-      result[name] = Array.from(value)
+      const bytes = new Array<number>(value.length)
+      for (let i = 0; i < bytes.length; i++) bytes[i] = value[i]
+      result[name] = bytes
     } else if (
       typeof value === 'bigint' ||
       (typeof value === 'number' && !Number.isFinite(value))

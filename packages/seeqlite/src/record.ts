@@ -12,14 +12,18 @@ export class Cursor {
   ) {}
 
   varint() {
-    let value = 0n
-    for (let i = 0; i < 8; i++) {
+    // Seven groups of seven bits always fit in a JavaScript number.
+    let value = 0
+    for (let i = 0; i < 7; i++) {
       const byte = this.view.getUint8(this.offset++)
-      value = (value << 7n) | BigInt(byte & 0x7f)
+      value = value * 128 + (byte & 0x7f)
       if (byte < 0x80) return value
     }
+    const eighth = this.view.getUint8(this.offset++)
+    const wide = (BigInt(value) << 7n) | BigInt(eighth & 0x7f)
+    if (eighth < 0x80) return wide
     // The ninth byte contributes all eight bits.
-    return (value << 8n) | BigInt(this.view.getUint8(this.offset++))
+    return (wide << 8n) | BigInt(this.view.getUint8(this.offset++))
   }
 
   take(length: number) {
@@ -54,8 +58,7 @@ function readValue(serial: number, body: Cursor, decoder: TextDecoder): SQLiteVa
   return serial % 2 === 0 ? bytes.slice() : decoder.decode(bytes)
 }
 
-export function decodeRecord(bytes: Uint8Array, decoder: TextDecoder) {
-  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+export function decodeRecord(view: DataView, decoder: TextDecoder) {
   const header = new Cursor(view)
   const headerSize = Number(header.varint())
   if (headerSize < header.offset || headerSize > view.byteLength) {

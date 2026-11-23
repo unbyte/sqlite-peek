@@ -64,7 +64,10 @@ export class DatabaseFile {
   private payload(cell: Cursor, size: number, index: boolean, visited: Set<number>) {
     const usable = this.usableSize
     const maxLocal = index ? Math.floor(((usable - 12) * 64) / 255) - 23 : usable - 35
-    if (size <= maxLocal) return cell.take(size)
+    if (size <= maxLocal) {
+      if (size > cell.view.byteLength - cell.offset) throw new Error('Truncated SQLite payload')
+      return new DataView(cell.view.buffer, cell.view.byteOffset + cell.offset, size)
+    }
     if (size > this.bytes.byteLength) throw new Error('Invalid SQLite payload size')
 
     // SQLite distributes overflow so the last page is full when the local cell permits it.
@@ -82,7 +85,7 @@ export class DatabaseFile {
       offset += length
     }
     if (next !== 0) throw new Error('Invalid SQLite overflow chain length')
-    return bytes
+    return new DataView(bytes.buffer)
   }
 
   records(root: number, index = false) {
@@ -110,7 +113,8 @@ export class DatabaseFile {
         cell.offset += 4
       }
       const size = Number(cell.varint())
-      const rowid = index ? undefined : integer(BigInt.asIntN(64, cell.varint()))
+      const key = index ? undefined : cell.varint()
+      const rowid = typeof key === 'bigint' ? integer(BigInt.asIntN(64, key)) : key
       const values = decodeRecord(this.payload(cell, size, index, visited), this.decoder)
       yield { rowid, values }
     }
