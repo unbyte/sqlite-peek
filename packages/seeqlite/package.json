@@ -1,0 +1,37 @@
+{
+  "name": "seeqlite",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "src/index.ts",
+  "files": [
+    "lib"
+  ],
+  "author": {
+    "name": "unbyte",
+    "url": "https://github.com/unbyte"
+  },
+  "license": "MIT",
+  "keywords": [],
+  "scripts": {
+    "build": "tsdown",
+    "prepublishOnly": "turbo run build"
+  },
+  "publishConfig": {
+    "access": "public",
+    "main": "lib/index.cjs",
+    "module": "lib/index.mjs",
+    "types": "lib/index.d.mts",
+    "exports": {
+      ".": {
+        "import": {
+          "types": "./lib/index.d.mts",
+          "default": "./lib/index.mjs"
+        },
+        "require": {
+          "types": "./lib/index.d.cts",
+          "default": "./lib/index.cjs"
+        }
+      }
+    }
+  }
+}
