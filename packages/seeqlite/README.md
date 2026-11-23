@@ -14,6 +14,8 @@ console.log(db.listTables())
 for (const row of db.rows('events').take(10)) {
   console.log(row)
 }
+
+document.querySelector('pre').textContent = JSON.stringify(db, null, 2)
 ```
 
 For a static page without a bundler, copy the package's `lib/index.mjs` beside the page and import `SQLiteReader` from `./index.mjs` inside a module script.
@@ -27,6 +29,17 @@ For a static page without a bundler, copy the package's `lib/index.mjs` beside t
 `db.rows(name)` returns a fresh synchronous iterator. Pass the exact name from `listTables()`. Each row is an object with the declared column names as its own properties and a null prototype. Iteration reads one record at a time, assembling overflow payloads as needed. For a complete table, use `Array.from(db.rows(name))`.
 
 Rowid tables iterate in rowid order. An `INTEGER PRIMARY KEY` alias contains its rowid. `WITHOUT ROWID` tables iterate in primary key order. Both expose values under the original column names. Safe integers and reals are JavaScript numbers, larger integers are exact `bigint` values, blobs are independent `Uint8Array` instances, and SQL NULL is `null`.
+
+## Displaying the whole database
+
+`db.toJSON()` reads every listed table into an object keyed by table name. Each value is an array of row objects, including an empty array for an empty table. `JSON.stringify(db)` calls this method automatically.
+
+| SQLite value                            | JSON representation           |
+| --------------------------------------- | ----------------------------- |
+| NULL, text, safe integer, finite real   | Corresponding JSON value      |
+| Integer outside JavaScript's safe range | Exact decimal string          |
+| Positive or negative infinity           | `"Infinity"` or `"-Infinity"` |
+| Blob                                    | Array of bytes from 0 to 255  |
 
 ## Preparing a snapshot
 

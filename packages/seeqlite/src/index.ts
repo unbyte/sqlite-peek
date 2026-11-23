@@ -4,8 +4,26 @@ import { TableLayout } from './schema'
 
 export type { SQLiteValue } from './record'
 export type SQLiteRow = Record<string, SQLiteValue>
+export type JSONRow = Record<string, null | number | string | number[]>
 
 type Table = { root: number; sql: string; layout?: TableLayout }
+
+function jsonRow(row: SQLiteRow): JSONRow {
+  const result: JSONRow = Object.create(null)
+  for (const [name, value] of Object.entries(row)) {
+    if (value instanceof Uint8Array) {
+      result[name] = Array.from(value)
+    } else if (
+      typeof value === 'bigint' ||
+      (typeof value === 'number' && !Number.isFinite(value))
+    ) {
+      result[name] = String(value)
+    } else {
+      result[name] = value
+    }
+  }
+  return result
+}
 
 export class SQLiteReader {
   private readonly file: DatabaseFile
@@ -27,7 +45,7 @@ export class SQLiteReader {
     return [...this.tables.keys()]
   }
 
-  *rows(name: string): Generator<SQLiteRow> {
+  *rows(name: string): Generator<SQLiteRow, void> {
     const table = this.tables.get(name)
     if (!table) throw new Error(`Unknown SQLite table "${name}"`)
     table.layout ??= new TableLayout(table.sql)
@@ -35,5 +53,13 @@ export class SQLiteReader {
     for (const { values, rowid } of this.file.records(table.root, layout.withoutRowid)) {
       yield layout.row(values, rowid)
     }
+  }
+
+  toJSON() {
+    const tables: Record<string, JSONRow[]> = Object.create(null)
+    for (const name of this.tables.keys()) {
+      tables[name] = Array.from(this.rows(name), jsonRow)
+    }
+    return tables
   }
 }
