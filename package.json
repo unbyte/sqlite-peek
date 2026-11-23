@@ -4,6 +4,7 @@
   "scripts": {
     "prepare": "lefthook install",
     "build": "turbo run build",
+    "bench": "vitest bench --run --config vitest.bench.config.ts",
     "check": "pnpm check:lint && pnpm check:types",
     "check:lint": "biome check",
     "check:types": "tsc --build",
@@ -15,8 +16,10 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
     "@types/node": "^26.6.5",
+    "@vitest/browser-playwright": "^5.1.1",
     "@vitest/coverage-v8": "^5.0.4",
     "lefthook": "^2.2.2",
+    "playwright": "^1.65.1",
     "tsdown": "^0.23.1",
     "tsx": "^4.23.15",
     "turbo": "^2.11.8",

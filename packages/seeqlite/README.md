@@ -46,3 +46,9 @@ Rowid tables iterate in rowid order. An `INTEGER PRIMARY KEY` alias contains its
 Finish the write transaction and close the producer's SQLite connections before copying the database. If the producer keeps a WAL-mode database open, checkpoint its committed transactions and take the snapshot while writes are paused. The reader sees only the bytes in the supplied main database file. [SQLite file format](https://sqlite.org/fileformat2.html)
 
 Use tables with stored columns. The reader reports an error when a table requires computing a virtual generated column, when an older record needs an explicit default other than bare NULL after `ALTER TABLE ... ADD COLUMN`, or when a `WITHOUT ROWID` primary key repeats a column. Stored generated columns and defaults already present in records are readable.
+
+## Benchmark
+
+With Google Chrome installed, run `pnpm bench` at the repository root. Vitest loads the reader directly from TypeScript source in Node and headless Chrome. Both runtimes use the same snapshot of 40,000 event rows and 40 overflow blobs and check the full JSON against a digest from `node:sqlite` before timing.
+
+The comparison table reports mean latency and percentiles in milliseconds. To measure fast reads with Chrome's timer, each sample batches 500 opens or 100 ten-row previews. Divide the reported mean by the batch size for a per-operation time. Each table scan, `toJSON()`, and `JSON.stringify()` sample measures one call.

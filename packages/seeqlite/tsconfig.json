@@ -12,5 +12,5 @@
     "incremental": true,
     "tsBuildInfoFile": "./node_modules/.tsbuildinfo"
   },
-  "include": ["src", "tests"]
+  "include": ["src", "tests", "bench"]
 }
