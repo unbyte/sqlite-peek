@@ -1,6 +1,7 @@
 {
   "name": "seeqlite",
   "version": "0.0.1",
+  "description": "A pure JS library to read SQLite database from a Uint8Array.",
   "type": "module",
   "main": "src/index.ts",
   "files": [
@@ -11,13 +12,25 @@
     "url": "https://github.com/unbyte"
   },
   "license": "MIT",
-  "keywords": [],
+  "homepage": "https://github.com/unbyte/seeqlite#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unbyte/seeqlite.git",
+    "directory": "packages/seeqlite"
+  },
+  "bugs": {
+    "url": "https://github.com/unbyte/seeqlite/issues"
+  },
+  "keywords": [
+    "sqlite",
+    "sqlite-reader",
+    "uint8array"
+  ],
   "scripts": {
     "build": "tsdown",
     "prepublishOnly": "turbo run build"
   },
   "publishConfig": {
-    "access": "public",
     "main": "lib/index.cjs",
     "module": "lib/index.mjs",
     "types": "lib/index.d.mts",
