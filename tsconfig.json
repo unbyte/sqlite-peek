@@ -5,7 +5,7 @@
       "path": "./tsconfig.node.json"
     },
     {
-      "path": "./packages/seeqlite"
+      "path": "./packages/sqlite-peek"
     }
   ]
 }

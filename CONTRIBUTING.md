@@ -1,4 +1,4 @@
-# Contributing to seeqlite
+# Contributing to sqlite-peek
 
 ## Setup and checks
 
@@ -12,7 +12,7 @@ pnpm check
 pnpm test
 ```
 
-`pnpm check` runs Biome and TypeScript. The test suite compares the reader against `node:sqlite` on databases from SQLite, sql.js, and SQLittle. [Fixture sources and cases](./packages/seeqlite/tests/fixtures/README.md)
+`pnpm check` runs Biome and TypeScript. The test suite compares the reader against `node:sqlite` on databases from SQLite, sql.js, and SQLittle. [Fixture sources and cases](./packages/sqlite-peek/tests/fixtures/README.md)
 
 ## Benchmarks
 

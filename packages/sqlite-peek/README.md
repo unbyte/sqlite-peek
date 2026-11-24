@@ -1,9 +1,9 @@
-# seeqlite
+# sqlite-peek
 
 A pure JS library to read SQLite database from a `Uint8Array`.
 
 ```js
-import { SQLiteReader } from 'seeqlite'
+import { SQLiteReader } from 'sqlite-peek'
 
 const db = new SQLiteReader(bytes)
 const tables = db.listTables()

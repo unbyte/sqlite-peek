@@ -1,5 +1,5 @@
 {
-  "name": "seeqlite",
+  "name": "sqlite-peek",
   "version": "0.0.1",
   "description": "A pure JS library to read SQLite database from a Uint8Array.",
   "type": "module",
@@ -12,14 +12,14 @@
     "url": "https://github.com/unbyte"
   },
   "license": "MIT",
-  "homepage": "https://github.com/unbyte/seeqlite#readme",
+  "homepage": "https://github.com/unbyte/sqlite-peek#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/unbyte/seeqlite.git",
-    "directory": "packages/seeqlite"
+    "url": "git+https://github.com/unbyte/sqlite-peek.git",
+    "directory": "packages/sqlite-peek"
   },
   "bugs": {
-    "url": "https://github.com/unbyte/seeqlite/issues"
+    "url": "https://github.com/unbyte/sqlite-peek/issues"
   },
   "keywords": [
     "sqlite",

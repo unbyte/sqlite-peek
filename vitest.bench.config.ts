@@ -3,7 +3,7 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
-    globalSetup: ['./packages/seeqlite/bench/setup.ts'],
+    globalSetup: ['./packages/sqlite-peek/bench/setup.ts'],
     projects: [
       {
         test: {

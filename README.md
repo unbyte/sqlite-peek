@@ -1,1 +1,1 @@
-packages/seeqlite/README.md
+packages/sqlite-peek/README.md

@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 
 export function snapshot(populate: (db: DatabaseSync) => void) {
-  const dir = mkdtempSync(join(tmpdir(), 'seeqlite-'))
+  const dir = mkdtempSync(join(tmpdir(), 'sqlite-peek-'))
   const file = join(dir, 'fixture.db')
   try {
     const db = new DatabaseSync(file)
