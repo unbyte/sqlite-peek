@@ -59,6 +59,7 @@ test('preserves signed rowids, integer widths, reals and empty values', () => {
     snapshot((db) => {
       db.exec('CREATE TABLE samples (v INTEGER, id INTEGER PRIMARY KEY, f REAL, t TEXT, b BLOB, n)')
       const insert = db.prepare("INSERT INTO samples VALUES (?, ?, -123.125, '', x'', NULL)")
+      insert.setReadBigInts(true)
       for (const value of integers) insert.run(value, value)
     }),
   )
